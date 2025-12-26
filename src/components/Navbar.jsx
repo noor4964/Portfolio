@@ -56,7 +56,7 @@ const Navbar = () => {
           whileTap={{ scale: 0.95 }}
         >
           <span className="logo-text">SK</span>
-          <span className="logo-dot">. ALAM</span>
+          <span className="logo-dot">. NUR ALAM</span>
         </motion.a>
 
         <div className="nav-links-desktop">

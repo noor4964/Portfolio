@@ -23,6 +23,11 @@ const Skills = ({ repos }) => {
 
   // Calculate language stats from repos
   const languageStats = useMemo(() => {
+    // Check if repos is a valid array
+    if (!repos || !Array.isArray(repos) || repos.length === 0) {
+      return [];
+    }
+    
     const langCount = {};
     repos.forEach(repo => {
       if (repo.language) {
@@ -31,6 +36,8 @@ const Skills = ({ repos }) => {
     });
     
     const total = Object.values(langCount).reduce((a, b) => a + b, 0);
+    if (total === 0) return [];
+    
     return Object.entries(langCount)
       .map(([lang, count]) => ({
         name: lang,

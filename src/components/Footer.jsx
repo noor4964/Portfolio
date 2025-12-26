@@ -40,8 +40,7 @@ const Footer = ({ profile }) => {
           {/* Logo & Description */}
           <div className="footer-brand">
             <a href="#home" className="footer-logo">
-              <span className="logo-text">SK</span>
-              <span className="logo-dot">.</span>
+              <span className="logo-text">SK. NUR ALAM</span>
             </a>
             <p>
               Building digital experiences that make a difference. 

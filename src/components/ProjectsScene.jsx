@@ -51,7 +51,6 @@ const ProjectsScene = () => {
         camera={{ position: [0, 0, 10], fov: 50 }}
         gl={{ antialias: false, powerPreference: "high-performance" }}
         dpr={[1, 1.5]}
-        frameloop="demand"
       >
         <ambientLight intensity={0.3} />
         <directionalLight position={[10, 10, 5]} intensity={0.8} />

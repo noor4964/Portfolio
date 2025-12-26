@@ -1,16 +1,14 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import About from './components/About';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
 import Loader from './components/Loader';
 import ParticleBackground from './components/ParticleBackground';
 import './App.css';
-
-// Lazy load heavy components
-const About = lazy(() => import('./components/About'));
-const Skills = lazy(() => import('./components/Skills'));
-const Projects = lazy(() => import('./components/Projects'));
-const Contact = lazy(() => import('./components/Contact'));
-const Footer = lazy(() => import('./components/Footer'));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -25,14 +23,24 @@ function App() {
           fetch('https://api.github.com/users/noor4964/repos?sort=updated&per_page=30')
         ]);
         
-        const profileData = await profileRes.json();
-        const reposData = await reposRes.json();
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          setProfile(profileData);
+        }
         
-        setProfile(profileData);
-        setRepos(reposData);
+        if (reposRes.ok) {
+          const reposData = await reposRes.json();
+          setRepos(Array.isArray(reposData) ? reposData : []);
+        } else {
+          // If API fails, set empty array to prevent errors
+          setRepos([]);
+        }
       } catch (error) {
         console.error('Error fetching GitHub data:', error);
+        // Set empty repos array on error
+        setRepos([]);
       } finally {
+        // Show loader for at least 2 seconds for better UX
         setTimeout(() => setLoading(false), 2000);
       }
     };
@@ -50,16 +58,12 @@ function App() {
       <Navbar />
       <main>
         <Hero profile={profile} />
-        <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
-          <About profile={profile} />
-          <Skills repos={repos} />
-          <Projects repos={repos} />
-          <Contact />
-        </Suspense>
+        <About profile={profile} />
+        <Skills repos={repos} />
+        <Projects repos={repos} />
+        <Contact />
       </main>
-      <Suspense fallback={null}>
-        <Footer profile={profile} />
-      </Suspense>
+      <Footer profile={profile} />
     </div>
   );
 }

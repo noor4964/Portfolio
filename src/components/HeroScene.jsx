@@ -65,7 +65,6 @@ const HeroScene = memo(() => {
         camera={{ position: [0, 0, isMobile ? 8 : 6], fov: 45 }}
         gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
         dpr={isMobile ? [0.5, 1] : [1, 1.5]}
-        frameloop="demand"
       >
         <color attach="background" args={["#0a0a0f"]} />
         <ambientLight intensity={0.35} />

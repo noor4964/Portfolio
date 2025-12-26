@@ -58,14 +58,23 @@ const Particles3D = memo(() => {
 
 const ParticleBackground = memo(() => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isVerySmall, setIsVerySmall] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth <= 768);
+    const checkScreenSize = () => {
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
+      setIsVerySmall(width < 480);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
   // Don't render particles on very small screens
-  if (isMobile && window.innerWidth < 480) {
-    return null;
+  if (isVerySmall) {
+    return <div className="particle-canvas" style={{ background: '#0a0a0f' }} />;
   }
 
   return (

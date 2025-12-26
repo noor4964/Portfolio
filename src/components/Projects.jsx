@@ -68,6 +68,11 @@ const Projects = ({ repos }) => {
 
   // Get unique languages/technologies
   const technologies = useMemo(() => {
+    // Check if repos is a valid array
+    if (!repos || !Array.isArray(repos) || repos.length === 0) {
+      return ['all'];
+    }
+    
     const langs = repos
       .filter(repo => repo.language)
       .map(repo => repo.language);
@@ -76,6 +81,11 @@ const Projects = ({ repos }) => {
 
   // Merge GitHub data with featured projects
   const projectsData = useMemo(() => {
+    // Check if repos is a valid array
+    if (!repos || !Array.isArray(repos) || repos.length === 0) {
+      return featuredProjects;
+    }
+    
     return featuredProjects.map(project => {
       const repoData = repos.find(r => r.name === project.name);
       return {
@@ -86,11 +96,16 @@ const Projects = ({ repos }) => {
         image: project.image,
         tags: project.tags,
       };
-    }).filter(p => p.html_url); // Only show projects that exist on GitHub
+    }).filter(p => p.html_url || p.name); // Show projects even if not on GitHub
   }, [repos]);
 
   // Other projects from GitHub
   const otherProjects = useMemo(() => {
+    // Check if repos is a valid array
+    if (!repos || !Array.isArray(repos) || repos.length === 0) {
+      return [];
+    }
+    
     const featuredNames = featuredProjects.map(p => p.name);
     return repos
       .filter(repo => !featuredNames.includes(repo.name) && repo.name !== 'noor4964')
