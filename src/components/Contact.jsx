@@ -42,18 +42,24 @@ const Contact = () => {
     e.preventDefault();
     setStatus({ loading: true, success: false, error: false, message: '' });
 
-    // For demo purposes - replace with your EmailJS credentials
     try {
-      // Simulating form submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // If you want to use EmailJS, uncomment and configure:
-      // await emailjs.sendForm(
-      //   'YOUR_SERVICE_ID',
-      //   'YOUR_TEMPLATE_ID',
-      //   formRef.current,
-      //   'YOUR_PUBLIC_KEY'
-      // );
+      // Get EmailJS credentials from environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      // Check if credentials are configured
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS credentials not configured. Please check your .env file.');
+      }
+
+      // Send email using EmailJS
+      await emailjs.sendForm(
+        serviceId,
+        templateId,
+        formRef.current,
+        publicKey
+      );
 
       setStatus({
         loading: false,
@@ -69,11 +75,12 @@ const Contact = () => {
       }, 5000);
 
     } catch (error) {
+      console.error('EmailJS Error:', error);
       setStatus({
         loading: false,
         success: false,
         error: true,
-        message: 'Something went wrong. Please try again.',
+        message: error.message || 'Something went wrong. Please try again.',
       });
     }
   };
@@ -82,8 +89,8 @@ const Contact = () => {
     {
       icon: <FiMail />,
       label: 'Email',
-      value: 'noor4964@example.com',
-      link: 'mailto:noor4964@example.com',
+      value: 'sk.nuralam@hotmail.com',
+      link: 'mailto:sk.nuralam@hotmail.com',
     },
     {
       icon: <FiMapPin />,
