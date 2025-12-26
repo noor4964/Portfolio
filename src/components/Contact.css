@@ -298,9 +298,9 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .contact {
-    padding: 4rem 1rem;
+    padding: 3rem 1.5rem;
   }
 
   .form-row {
@@ -309,7 +309,30 @@
   }
 
   .contact-form-wrapper {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .info-card {
+    padding: 1.25rem;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact {
+    padding: 2.5rem 1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .contact-form-wrapper {
+    padding: 1.5rem 1rem;
   }
 
   .info-card {
@@ -320,5 +343,10 @@
     width: 40px;
     height: 40px;
     font-size: 1rem;
+  }
+
+  .submit-btn {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.95rem;
   }
 }

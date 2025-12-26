@@ -74,7 +74,12 @@ const SkillsScene = () => {
       pointerEvents: 'none',
       margin: '2rem 0'
     }}>
-      <Canvas camera={{ position: [0, 2, 10], fov: 50 }}>
+      <Canvas 
+        camera={{ position: [0, 2, 10], fov: 50 }}
+        gl={{ antialias: false, powerPreference: "high-performance" }}
+        dpr={[1, 1.5]}
+        frameloop="demand"
+      >
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
         <pointLight position={[-5, -5, -5]} color="#667eea" intensity={0.5} />

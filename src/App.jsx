@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import Loader from './components/Loader';
 import ParticleBackground from './components/ParticleBackground';
 import './App.css';
+
+// Lazy load heavy components
+const About = lazy(() => import('./components/About'));
+const Skills = lazy(() => import('./components/Skills'));
+const Projects = lazy(() => import('./components/Projects'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -48,12 +50,16 @@ function App() {
       <Navbar />
       <main>
         <Hero profile={profile} />
-        <About profile={profile} />
-        <Skills repos={repos} />
-        <Projects repos={repos} />
-        <Contact />
+        <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
+          <About profile={profile} />
+          <Skills repos={repos} />
+          <Projects repos={repos} />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer profile={profile} />
+      <Suspense fallback={null}>
+        <Footer profile={profile} />
+      </Suspense>
     </div>
   );
 }

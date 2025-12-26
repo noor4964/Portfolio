@@ -283,11 +283,12 @@
 
 @media (max-width: 768px) {
   .skills {
-    padding: 4rem 1rem;
+    padding: 3rem 1.5rem;
   }
 
   .skills-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .skills-orbit {
@@ -325,5 +326,48 @@
 
   .legend-item {
     font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skills {
+    padding: 2.5rem 1rem;
+  }
+
+  .skill-category {
+    padding: 1.5rem;
+  }
+
+  .category-title {
+    font-size: 1.1rem;
+  }
+
+  .skills-orbit {
+    width: 240px;
+    height: 240px;
+  }
+
+  .orbit-1 {
+    width: 120px;
+    height: 120px;
+    margin: -60px 0 0 -60px;
+  }
+
+  .orbit-2 {
+    width: 180px;
+    height: 180px;
+    margin: -90px 0 0 -90px;
+  }
+
+  .orbit-center {
+    width: 60px;
+    height: 60px;
+    font-size: 0.6rem;
+  }
+
+  .orbit-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.9rem;
   }
 }

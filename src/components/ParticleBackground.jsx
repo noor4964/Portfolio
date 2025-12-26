@@ -1,14 +1,19 @@
-import { Suspense, useRef, useMemo } from 'react';
+import { Suspense, useRef, useMemo, memo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 import './ParticleBackground.css';
 
-const Particles3D = () => {
+const Particles3D = memo(() => {
   const ref = useRef();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
   
   const [positions, colors] = useMemo(() => {
-    const count = 2000;
+    const count = isMobile ? 500 : 1000;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     
@@ -27,7 +32,7 @@ const Particles3D = () => {
     }
     
     return [positions, colors];
-  }, []);
+  }, [isMobile]);
   
   useFrame((state) => {
     if (ref.current) {
@@ -49,15 +54,27 @@ const Particles3D = () => {
       />
     </Points>
   );
-};
+});
 
-const ParticleBackground = () => {
+const ParticleBackground = memo(() => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
+
+  // Don't render particles on very small screens
+  if (isMobile && window.innerWidth < 480) {
+    return null;
+  }
+
   return (
     <div className="particle-canvas">
       <Canvas
         camera={{ position: [0, 0, 15], fov: 75 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        dpr={isMobile ? [0.5, 1] : [1, 1.5]}
+        frameloop="always"
       >
         <color attach="background" args={['#0a0a0f']} />
         <Suspense fallback={null}>
@@ -66,6 +83,6 @@ const ParticleBackground = () => {
       </Canvas>
     </div>
   );
-};
+});
 
 export default ParticleBackground;

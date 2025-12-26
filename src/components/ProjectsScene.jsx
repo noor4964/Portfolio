@@ -47,7 +47,12 @@ const ProjectsScene = () => {
       pointerEvents: 'none',
       zIndex: 0
     }}>
-      <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+      <Canvas 
+        camera={{ position: [0, 0, 10], fov: 50 }}
+        gl={{ antialias: false, powerPreference: "high-performance" }}
+        dpr={[1, 1.5]}
+        frameloop="demand"
+      >
         <ambientLight intensity={0.3} />
         <directionalLight position={[10, 10, 5]} intensity={0.8} />
         <pointLight position={[-10, -10, -5]} color="#764ba2" intensity={0.4} />

@@ -1,10 +1,10 @@
-import { Suspense } from 'react';
+import { Suspense, memo, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Float, Stars } from '@react-three/drei';
 
-const GlowIcosahedron = () => (
+const GlowIcosahedron = memo(() => (
   <Float speed={1.5} rotationIntensity={1.2} floatIntensity={1.2}>
-    <mesh castShadow>
+    <mesh>
       <icosahedronGeometry args={[1.6, 0]} />
       <meshStandardMaterial
         color="#667eea"
@@ -15,12 +15,12 @@ const GlowIcosahedron = () => (
       />
     </mesh>
   </Float>
-);
+));
 
-const AccentTorus = () => (
+const AccentTorus = memo(() => (
   <Float speed={2.2} rotationIntensity={1.5} floatIntensity={1.4}>
-    <mesh position={[2.6, -0.4, -1]} castShadow>
-      <torusKnotGeometry args={[0.7, 0.2, 120, 16]} />
+    <mesh position={[2.6, -0.4, -1]}>
+      <torusKnotGeometry args={[0.7, 0.2, 64, 8]} />
       <meshStandardMaterial
         color="#f093fb"
         metalness={0.3}
@@ -30,12 +30,12 @@ const AccentTorus = () => (
       />
     </mesh>
   </Float>
-);
+));
 
-const AccentSphere = () => (
+const AccentSphere = memo(() => (
   <Float speed={1.8} rotationIntensity={1} floatIntensity={1.1}>
-    <mesh position={[-2.4, 0.8, -0.6]} castShadow>
-      <sphereGeometry args={[0.6, 48, 48]} />
+    <mesh position={[-2.4, 0.8, -0.6]}>
+      <sphereGeometry args={[0.6, 24, 24]} />
       <meshStandardMaterial
         color="#7dd3fc"
         metalness={0.2}
@@ -45,32 +45,44 @@ const AccentSphere = () => (
       />
     </mesh>
   </Float>
-);
+));
 
-const HeroScene = () => {
+const HeroScene = memo(() => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="hero-canvas-wrapper">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
+        camera={{ position: [0, 0, isMobile ? 8 : 6], fov: 45 }}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        dpr={isMobile ? [0.5, 1] : [1, 1.5]}
+        frameloop="demand"
       >
         <color attach="background" args={["#0a0a0f"]} />
         <ambientLight intensity={0.35} />
-        <directionalLight position={[5, 6, 5]} intensity={1.1} castShadow />
+        <directionalLight position={[5, 6, 5]} intensity={1.1} />
         <pointLight position={[-6, -4, -4]} intensity={0.4} />
 
         <Suspense fallback={null}>
           <GlowIcosahedron />
           <AccentTorus />
           <AccentSphere />
-          <Stars radius={12} depth={30} count={4000} factor={0.6} fade speed={1} />
+          <Stars radius={12} depth={30} count={isMobile ? 800 : 2000} factor={0.6} fade speed={1} />
         </Suspense>
 
-        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.2} />
+        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.2} enableDamping={false} />
       </Canvas>
     </div>
   );
-};
+});
 
 export default HeroScene;
